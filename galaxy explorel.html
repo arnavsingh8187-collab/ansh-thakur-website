@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome Ansh Thakur | Galaxy Explorel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:white;background:radial-gradient(circle at top,#192b68,#050817 65%);min-height:100vh}
+header{text-align:center;padding:28px 12px;background:linear-gradient(120deg,#08132f,#251052,#06365c);border-bottom:2px solid #40d9ff}
+header h1{margin:0;font-size:clamp(25px,5vw,42px);text-shadow:0 0 18px #36cfff}
+header h2{margin:10px 0;color:#54dfff;font-size:clamp(22px,4vw,34px)}
+header p{color:#c6ddff}
+nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:14px;background:#050b1b;position:sticky;top:0}
+button{cursor:pointer;color:white;background:#102957;border:1px solid #2774aa;border-radius:9px;padding:11px 15px}
+button:hover{background:#174b83}
+main{max-width:1100px;margin:auto;padding:20px}
+.hero,.panel{background:#091832;border:1px solid #174579;border-radius:16px;padding:22px;margin-bottom:18px}
+.hero{background:linear-gradient(110deg,#09152e,#171047,#063451)}
+.hero h2{font-size:clamp(26px,5vw,45px);margin:5px 0;color:#6ce6ff}
+.hero p,.muted{color:#bfd4f6;line-height:1.7}
+.search{width:100%;padding:13px;border-radius:9px;border:1px solid #28649b;background:#050d20;color:white;font-size:16px;margin:8px 0 15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.card{background:#071126;border:1px solid #1d4576;border-radius:13px;padding:16px;text-align:center;cursor:pointer}
+.card:hover{border-color:#52dfff;transform:translateY(-2px)}
+.planet{font-size:45px;margin:8px}
+.card h3{margin:5px}
+.info{padding:15px;background:#071126;border-radius:10px;margin-top:15px;line-height:1.8;color:#d5e8ff}
+.hidden{display:none}
+.fact{padding:12px;border-bottom:1px solid #244064;color:#d4e5ff}
+footer{text-align:center;padding:22px;color:#9bb8df}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚀 WELCOME ANSH THAKUR</h1>
+  <h2>🌌 GALAXY EXPLOREL</h2>
+  <p>Explore Planets • Discover Galaxies • Learn About Space</p>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">🏠 Home</button>
+  <button onclick="showPage('planets')">🪐 Planets</button>
+  <button onclick="showPage('galaxies')">🌌 Galaxies</button>
+  <button onclick="showPage('facts')">⭐ Space Facts</button>
+  <button onclick="showPage('quiz')">🧠 Space Quiz</button>
+</nav>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <h2>Explore the Infinite Universe</h2>
+    <p>Welcome to your space mission! Discover amazing planets, explore distant galaxies and test your knowledge about the universe.</p>
+    <button onclick="showPage('planets')">🚀 Start Exploring</button>
+    <button onclick="showPage('quiz')">Take the Quiz</button>
+  </div>
+  <div class="panel">
+    <h2>🔭 Search Space</h2>
+    <input class="search" id="search" placeholder="Search Earth, Mars, Sun, Milky Way..." oninput="searchSpace()">
+    <div id="searchResult" class="info">Type a space object in the search box.</div>
+  </div>
+  <div class="panel">
+    <h2>🪐 Explore Our Solar System</h2>
+    <div class="grid" id="homePlanets"></div>
+  </div>
+</section>
+
+<section id="planets" class="hidden">
+  <div class="panel">
+    <h2>🪐 Planet Explorer</h2>
+    <p class="muted">Select a planet to learn more about it.</p>
+    <div class="grid" id="allPlanets"></div>
+    <div class="info" id="planetInfo">Choose a planet above.</div>
+  </div>
+</section>
+
+<section id="galaxies" class="hidden">
+  <div class="panel">
+    <h2>🌌 Galaxy Explorer</h2>
+    <div class="grid" id="galaxyGrid"></div>
+    <div class="info" id="galaxyInfo">Choose a galaxy to learn about it.</div>
+  </div>
+</section>
+
+<section id="facts" class="hidden">
+  <div class="panel">
+    <h2>⭐ Amazing Space Facts</h2>
+    <div id="factsList"></div>
+    <button onclick="newFact()">✨ Show a Random Fact</button>
+    <div class="info" id="randomFact">Press the button for a space fact.</div>
+  </div>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="panel">
+    <h2>🧠 Space Quiz</h2>
+    <p id="question"></p>
+    <div id="options"></div>
+    <div class="info" id="quizMessage">Choose your answer.</div>
+    <p id="score">Score: 0</p>
+    <button onclick="nextQuestion()">Next Question →</button>
+    <button onclick="restartQuiz()">Restart</button>
+  </div>
+</section>
+</main>
+
+<footer>🌌 GALAXY EXPLOREL | Made with ❤️ for Space Lovers</footer>
+
+<script>
+const planets=[
+{name:"Mercury",emoji:"☿️",type:"Rocky planet",distance:"57.9 million km",year:"88 Earth days",moons:0,description:"Mercury is the smallest planet and the closest to the Sun."},
+{name:"Venus",emoji:"🟠",type:"Rocky planet",distance:"108.2 million km",year:"225 Earth days",moons:0,description:"Venus is the hottest planet in our solar system."},
+{name:"Earth",emoji:"🌍",type:"Rocky planet",distance:"149.6 million km",year:"365 days",moons:1,description:"Earth is our home and the only planet known to support life."},
+{name:"Mars",emoji:"🔴",type:"Rocky planet",distance:"227.9 million km",year:"687 Earth days",moons:2,description:"Mars is called the Red Planet because of rusty iron minerals in its soil."},
+{name:"Jupiter",emoji:"🟤",type:"Gas giant",distance:"778.6 million km",year:"11.86 Earth years",moons:95,description:"Jupiter is the largest planet and has a giant storm called the Great Red Spot."},
+{name:"Saturn",emoji:"🪐",type:"Gas giant",distance:"1.43 billion km",year:"29.4 Earth years",moons:146,description:"Saturn is famous for its beautiful rings made mostly of ice and rocky particles."},
+{name:"Uranus",emoji:"🔵",type:"Ice giant",distance:"2.87 billion km",year:"84 Earth years",moons:28,description:"Uranus rotates on its side compared with most planets."},
+{name:"Neptune",emoji:"🔵",type:"Ice giant",distance:"4.5 billion km",year:"165 Earth years",moons:16,description:"Neptune is a distant blue planet with extremely fast winds."}
+];
+
+const galaxies=[
+{name:"Milky Way",emoji:"🌌",type:"Barred spiral galaxy",distance:"We live inside it",description:"Our solar system is inside the Milky Way galaxy."},
+{name:"Andromeda",emoji:"✨",type:"Spiral galaxy",distance:"About 2.5 million light-years",description:"Andromeda is the nearest major galaxy to the Milky Way."},
+{name:"Triangulum",emoji:"🌠",type:"Spiral galaxy",distance:"About 2.7 million light-years",description:"Triangulum is a member of our Local Group of galaxies."},
+{name:"Whirlpool Galaxy",emoji:"🌀",type:"Spiral galaxy",distance:"About 23 million light-years",description:"The Whirlpool Galaxy is known for its striking spiral arms."}
+];
+
+const facts=[
+"Jupiter is the largest planet in our solar system.",
+"A day on Venus is longer than its year.",
+"Sunlight takes about 8 minutes and 20 seconds to reach Earth.",
+"Saturn's rings are made mostly of ice and rocky particles.",
+"The Sun is a star at the centre of our solar system.",
+"Neptune is the farthest planet from the Sun.",
+"Earth has one natural moon.",
+"The Milky Way contains enormous numbers of stars."
+];
+
+function showPage(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function planetCard(p){
+ return `<div class="card" onclick="showPlanet('${p.name}')">
+ <div class="planet">${p.emoji}</div><h3>${p.name}</h3><p class="muted">${p.type}</p></div>`;
+}
+
+document.getElementById("homePlanets").innerHTML=planets.slice(0,4).map(planetCard).join("");
+document.getElementById("allPlanets").innerHTML=planets.map(planetCard).join("");
+
+function showPlanet(name){
+ const p=planets.find(x=>x.name===name);
+ showPage("planets");
+ document.getElementById("planetInfo").innerHTML=
+ `<h2>${p.emoji} ${p.name}</h2><p>${p.description}</p>
+ <b>Type:</b> ${p.type}<br>
+ <b>Distance from Sun:</b> ${p.distance}<br>
+ <b>Year length:</b> ${p.year}<br>
+ <b>Known moons:</b> ${p.moons}`;
+}
+
+document.getElementById("galaxyGrid").innerHTML=galaxies.map((g,i)=>
+ `<div class="card" onclick="showGalaxy(${i})"><div class="planet">${g.emoji}</div><h3>${g.name}</h3><p>${g.type}</p></div>`
+).join("");
+
+function showGalaxy(i){
+ const g=galaxies[i];
+ document.getElementById("galaxyInfo").innerHTML=
+ `<h2>${g.emoji} ${g.name}</h2><p>${g.description}</p><b>Type:</b> ${g.type}<br><b>Distance:</b> ${g.distance}`;
+}
+
+function searchSpace(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const out=document.getElementById("searchResult");
+ if(!q){out.textContent="Type a space object in the search box.";return}
+ const p=planets.find(x=>x.name.toLowerCase().includes(q));
+ const g=galaxies.find(x=>x.name.toLowerCase().includes(q));
+ if(p)out.innerHTML=`<h3>${p.emoji} ${p.name}</h3>${p.description}<br><button onclick="showPlanet('${p.name}')">Open planet profile</button>`;
+ else if(g)out.innerHTML=`<h3>${g.emoji} ${g.name}</h3>${g.description}<br><button onclick="showPage('galaxies');showGalaxy(${galaxies.indexOf(g)})">Open galaxy profile</button>`;
+ else if("sun".includes(q))out.innerHTML="<h3>☀️ The Sun</h3>The Sun is the star at the centre of our solar system.";
+ else out.textContent="No match found. Try Earth, Mars, Jupiter, Sun, Milky Way or Andromeda.";
+}
+
+document.getElementById("factsList").innerHTML=facts.map(f=>`<div class="fact">✨ ${f}</div>`).join("");
+function newFact(){
+ document.getElementById("randomFact").textContent=facts[Math.floor(Math.random()*facts.length)];
+}
+
+const questions=[
+{q:"Which is the largest planet?",a:["Earth","Jupiter","Mars","Venus"],correct:1},
+{q:"Which planet is called the Red Planet?",a:["Venus","Mercury","Mars","Neptune"],correct:2},
+{q:"What is the name of our galaxy?",a:["Andromeda","Milky Way","Whirlpool","Triangulum"],correct:1},
+{q:"Which star is closest to Earth?",a:["Sirius","The Sun","Polaris","Betelgeuse"],correct:1},
+{q:"Which planet is famous for its rings?",a:["Mars","Earth","Saturn","Mercury"],correct:2}
+];
+let qi=0,score=0,answered=false;
+
+function renderQuestion(){
+ answered=false;
+ const q=questions[qi];
+ document.getElementById("question").textContent=`Question ${qi+1}/${questions.length}: ${q.q}`;
+ document.getElementById("options").innerHTML=q.a.map((a,i)=>
+ `<button style="display:block;width:100%;margin:8px 0;text-align:left" onclick="answerQuestion(${i})">${String.fromCharCode(65+i)}. ${a}</button>`
+ ).join("");
+ document.getElementById("quizMessage").textContent="Choose your answer.";
+ document.getElementById("score").textContent="Score: "+score;
+}
+function answerQuestion(i){
+ if(answered)return;
+ answered=true;
+ const q=questions[qi];
+ if(i===q.correct){score++;document.getElementById("quizMessage").textContent="Correct! Great job! 🚀";}
+ else document.getElementById("quizMessage").textContent="Not quite! The correct answer is "+q.a[q.correct]+".";
+ document.getElementById("score").textContent="Score: "+score;
+}
+function nextQuestion(){
+ if(qi===questions.length-1){
+ alert("Quiz complete! Your score: "+score+"/"+questions.length);
+ qi=0;score=0;
+ }else qi++;
+ renderQuestion();
+}
+function restartQuiz(){qi=0;score=0;renderQuestion()}
+renderQuestion();
+</script>
+</body>
+</html>
